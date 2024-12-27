@@ -21,8 +21,7 @@
             </div>
             <div class="form-floating">
                 <input type="password" class="form-control rounded-top @error('password') is-invalid @enderror"
-                    name="password" id="password" placeholder="Password" value="{{ old('password', $user->password) }}"
-                    required>
+                    name="password" id="password" placeholder="Password">
                 <label for="password">Password</label>
                 @error('password')
                     <div id="password" class="invalid-tooltip">

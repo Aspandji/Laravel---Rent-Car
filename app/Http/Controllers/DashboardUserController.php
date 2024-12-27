@@ -84,14 +84,26 @@ class DashboardUserController extends Controller
         // dd($request->all());
         $validatedData = $request->validate([
             'username' => 'required|min:3|max:25',
-            'password' => 'required|min:8|max:255',
+            // 'password' => 'required|min:8|max:255',
             'phone'    => 'numeric|min:10',
             'address'  => 'required'
         ]);
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
+        // $validatedData['password'] = Hash::make($validatedData['password']);
 
         $userUpdate = User::where('slug', $slug)->first();
+
+        // Cek jika admin ingin mengubah password
+        if ($request->filled('password')) { // untuk memeriksa apakah admin mengisi input password.
+            $request->validate([
+                'password' => 'required|min:8|max:255',
+            ]);
+            $validatedData['password'] = Hash::make($request->password);
+        } else {
+            // Jika password tidak diisi dalam request, password pengguna tidak diubah
+            unset($validatedData['password']);
+        }
+
         $userUpdate->status = $request->status;
         $userUpdate->slug = null;
         $userUpdate->update($validatedData);
